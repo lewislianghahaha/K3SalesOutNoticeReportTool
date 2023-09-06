@@ -106,15 +106,102 @@ namespace K3SalesOutNoticeReportTool
         {
             try
             {
+                var customerlist = string.Empty;
+                var temp = string.Empty;
+
                 //todo:获取相关信息
+                var sdt = dtStr.Value.ToString("yyyy-MM-dd");
+                var edt = dtEnd.Value.ToString("yyyy-MM-dd");
 
+                var message = $"准备执行,\n请注意:" +
+                      $"\n1.执行成功的结果会下载至'{txtadd.Text}'指定文件夹内," +
+                      $"\n2.执行日期范围:从'{sdt}'至'{edt}',"+
+                      "\n3.执行过程中不要关闭软件,不然会导致运算失败" + "\n是否继续执行?";
 
+                //检查‘输出地址’是否有填
+                if (txtadd.Text == "") throw new Exception($"请设置导出地址.");
+                //判断若gvdtl没有记录,不能进行运算
+                if (gvdtl.RowCount == 0) throw new Exception($"请添加记录后再进行运算");
+                //若结束日期小于开始日期,报异常提示
+                if (DateTime.Compare(Convert.ToDateTime(sdt), Convert.ToDateTime(edt)) > 0) throw new Exception($"结束日期不能小于开始日期,请重新选择日期并进行运算");
+
+                if (MessageBox.Show(message, $"提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                {
+                    //将相关按钮设置为不可操作;直至运行完成后才恢复
+                    tmclose.Enabled = false;
+                    tmimport.Enabled = false;
+                    btngenerate.Enabled = false;
+                    btnsetadd.Enabled = false;
+
+                    var customerdt = _dtl.Copy();
+                    //对已添加的‘客户列表’整合,合拼为一行并以,分隔
+                    //通过循环将选中行的客户编码进行收集(注:去除重复的选项,只保留不重复的主键记录)
+                    foreach (DataRow rows in customerdt.Rows)
+                    {
+                        if (string.IsNullOrEmpty(temp))
+                        {
+                            customerlist = "'" + Convert.ToString(rows[0]) + "'";
+                            temp = Convert.ToString(rows[0]);
+                        }
+                        else
+                        //todo:检测若循环的值1.与中转变量TEMP不同 且 不在 customerlist内才添加
+                        {
+                            if (temp != Convert.ToString(rows[0]) && !customerlist.Contains(Convert.ToString(rows[0])))
+                            {
+                                customerlist += "," + "'" + Convert.ToString(rows[0]) + "'";
+                                temp = Convert.ToString(rows[0]);
+                            }
+                        }
+                    }
+
+                    //var a = customerlist;
+
+                    taskLogic.TaskId = 1;
+                    taskLogic.Sdt = sdt;
+                    taskLogic.Edt = edt;
+                    taskLogic.Customerlist = customerlist;
+                    //taskLogic.Custdtlist = customerdt;
+                    taskLogic.FileAddress = txtadd.Text;
+
+                    //使用子线程工作(作用:通过调用子线程进行控制Load窗体的关闭情况)
+                    new Thread(Start).Start();
+                    load.StartPosition = FormStartPosition.CenterScreen;
+                    load.ShowDialog();
+
+                    //todo:返回执行结果
+                    if (taskLogic.ResultMark == "Finish")
+                    {
+                        MessageBox.Show($"执行成功,请到'{txtadd.Text}'进行查阅", $"成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        throw new Exception($"执行异常,原因:'{taskLogic.ResultMark}',\n请将此截图截图发给IT运营部进行处理");
+                    }
+
+                    //todo:运算完成后,无论成功与否,将原来设置的文本框(按钮) 及 Gridview初始化
+                    txtadd.Text = "";
+                    tmclose.Enabled = true;
+                    tmimport.Enabled = true;
+                    btngenerate.Enabled = true;
+                    btnsetadd.Enabled = true;
+
+                    txtadd.Text = "";
+                    var dt = (DataTable)gvdtl.DataSource;
+                    dt.Rows.Clear();
+                    dt.Columns.Clear();
+                    gvdtl.DataSource = dt;
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, $"错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //todo:当出现异常后，也将所有项清空
+                //todo:当出现异常后，也将所有项初始化
                 txtadd.Text = "";
+                tmclose.Enabled = true;
+                tmimport.Enabled = true;
+                btngenerate.Enabled = true;
+                btnsetadd.Enabled = true;
+
                 if (gvdtl?.Rows.Count > 0)
                 {
                     var dt = (DataTable)gvdtl?.DataSource;

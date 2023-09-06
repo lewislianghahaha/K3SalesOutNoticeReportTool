@@ -40,7 +40,7 @@ namespace K3SalesOutNoticeReportTool.Task
         {
             IWorkbook wk;
             //获取动态生成绑定字段临时表
-            var dt = tempDtList.BatchConfirmDtTemp();
+            var dt = tempDtList.ImportBatchCustomerExcelDt();
 
             using (var fsRead = File.OpenRead(fileAddress))
             {
@@ -63,6 +63,13 @@ namespace K3SalesOutNoticeReportTool.Task
                     {
                         var cell = row.GetCell(j);
                         var cellValue = GetCellValue(cell);
+
+                        //todo:判断cellValue在dt内存在,不进行插入 （作用:排除相同的记录）
+                        if (dt.Select("客户编码='"+cellValue+"'").Length>0 || dt.Select("客户名称='"+cellValue+"'").Length>0)
+                        {
+                            continue;
+                        }
+
                         //当为空的就不获取
                         if (cellValue == string.Empty)
                         {

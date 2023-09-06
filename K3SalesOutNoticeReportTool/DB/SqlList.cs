@@ -23,9 +23,9 @@ namespace K3SalesOutNoticeReportTool.DB
 		                    ,CONVERT(VARCHAR(10),X.发货日期,23) 发货日期
 		                    ,X.U订货单号,X.单据编号,X.摘要,X.托运货场地址
 		                    ,X.产品名称,X.规格型号  
-		                    ,X.实发罐数 实发罐数
-		                    ,CASE X.REMAKID WHEN 1 THEN X.单价 ELSE NULL END  单价
-		                    ,CASE X.REMAKID WHEN 1 THEN X.金额 ELSE NULL END 金额
+		                    ,X.实发罐数
+		                    ,CASE X.REMAKID WHEN 1 THEN X.单价 ELSE 0 END  单价
+		                    ,CASE X.REMAKID WHEN 1 THEN X.金额 ELSE 0 END 金额
 		                    ,X.备注,X.开票人
 
 	                FROM (	
@@ -171,6 +171,20 @@ namespace K3SalesOutNoticeReportTool.DB
             return _result;
         }
 
+        /// <summary>
+        /// 根据从EXCEL导入的记录获取相关客户信息(包含FCUSTID)
+        /// </summary>
+        /// <param name="customerlist"></param>
+        /// <returns></returns>
+        public string SearchCustomList(string customerlist)
+        {
+            _result = $@"SELECT A.FCUSTID,A.FNUMBER,B.FNAME 
+                        FROM dbo.T_BD_CUSTOMER A
+                        INNER JOIN dbo.T_BD_CUSTOMER_L B ON A.FCUSTID=B.FCUSTID AND B.FLOCALEID='2052'
+                        WHERE A.FNUMBER IN({customerlist})";
+
+            return _result;
+        }
 
     }
 }

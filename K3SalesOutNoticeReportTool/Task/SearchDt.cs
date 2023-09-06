@@ -47,5 +47,16 @@ namespace K3SalesOutNoticeReportTool.Task
             return dt;
         }
 
+        /// <summary>
+        /// 根据从EXCEL导入的记录获取相关客户信息(包含FCUSTID)
+        /// </summary>
+        /// <param name="customerlist"></param>
+        /// <returns></returns>
+        public DataTable SearchCustomList(string customerlist)
+        {
+            var dt = UseSqlSearchIntoDt(sqlList.SearchCustomList(customerlist));
+            return dt;
+        }
+
     }
 }

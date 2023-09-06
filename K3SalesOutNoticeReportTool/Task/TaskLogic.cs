@@ -1,25 +1,22 @@
-﻿//中转(功能分配)
+﻿using System.Data;
 
-using System.Data;
-using NPOI.POIFS.Dev;
-
+//中转(功能分配)
 namespace K3SalesOutNoticeReportTool.Task
 {
     public class TaskLogic
     {
-        SearchDt serchDt = new SearchDt();
         Generate generate = new Generate();
         ImportDt importDt = new ImportDt();
 
         #region 变量参数
         private int _taskid;
-        private string _sdt;           //开始日期(运算时使用)
-        private string _edt;           //结束日期(运算时使用)
-        private string _customerlist;  //客户列表(运算时使用)
-        private string _fileAddress;   //文件地址('自定义批量导出'-导入EXCEL 及 导出地址收集使用)
-        private DataTable _custdtlist; //获取前端的客户列表DT(自定义批量导出功能使用)
+        private string _sdt;                //开始日期(运算时使用)
+        private string _edt;                //结束日期(运算时使用)
+        private string _customerlist;       //客户列表(运算时使用)
+        private string _fileAddress;        //文件地址('自定义批量导出'-导入EXCEL 及 导出地址收集使用)
+       // private DataTable _custdtlistDt;    //获取前端的客户列表DT(自定义批量导出功能使用)
 
-        private string _resultmark;    //返回是否成功标记
+        private string _resultmark;         //返回是否成功标记
         private DataTable _resultImportDt;  //返回导入EXCEL信息
 
         #endregion
@@ -51,7 +48,7 @@ namespace K3SalesOutNoticeReportTool.Task
         /// <summary>
         /// 获取前端的客户列表DT(自定义批量导出功能使用)
         /// </summary>
-        public DataTable Custdtlist { set { _custdtlist = value; } }
+        //public DataTable Custdtlist { set { _custdtlistDt = value; } }
         #endregion
 
         #region Get
@@ -76,7 +73,7 @@ namespace K3SalesOutNoticeReportTool.Task
                     break;
                 //运算
                 case 1:
-                    GenerateRdAndExportPdf(_sdt,_edt,_customerlist, _custdtlist, _fileAddress);
+                    GenerateRdAndExportPdf(_sdt,_edt,_customerlist, _fileAddress);
                     break;
             }
         }
@@ -96,11 +93,10 @@ namespace K3SalesOutNoticeReportTool.Task
         /// <param name="sdt"></param>
         /// <param name="edt"></param>
         /// <param name="customerlist"></param>
-        /// <param name="custlistdt"></param>
         /// <param name="exportaddress"></param>
-        private void GenerateRdAndExportPdf(string sdt, string edt, string customerlist, DataTable custlistdt,string exportaddress)
+        private void GenerateRdAndExportPdf(string sdt, string edt, string customerlist,string exportaddress)
         {
-            _resultmark = generate.GenerateRdAndExportPdf(sdt,edt,customerlist,custlistdt,exportaddress);
+            _resultmark = generate.GenerateRdAndExportPdf(sdt,edt,customerlist,exportaddress);
         }
 
     }

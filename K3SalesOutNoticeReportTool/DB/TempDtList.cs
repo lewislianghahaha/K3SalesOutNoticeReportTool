@@ -13,7 +13,7 @@ namespace K3SalesOutNoticeReportTool.DB
         public DataTable BatchConfirmDtTemp()
         {
             var dt = new DataTable();
-            for (var i = 0; i < 21; i++)
+            for (var i = 0; i < 24; i++)
             {
                 var dc = new DataColumn();
                 switch (i)
@@ -121,6 +121,69 @@ namespace K3SalesOutNoticeReportTool.DB
                     //销售订单号
                     case 20:
                         dc.ColumnName = "SaleOrderNo";
+                        dc.DataType = Type.GetType("System.String");
+                        break;
+                    //FPriceShow-用于显示在STI报表的单价
+                    case 21:
+                        dc.ColumnName = "FPriceShow";
+                        dc.DataType = Type.GetType("System.String");
+                        break;
+                    //FAmountShow-用于显示在STI报表的金额
+                    case 22:
+                        dc.ColumnName = "FAmountShow";
+                        dc.DataType = Type.GetType("System.String");
+                        break;
+                    //FRemarkid-用于在STI报表分组使用-客户等级ID
+                    case 23:
+                        dc.ColumnName = "FRemarkid";
+                        dc.DataType = Type.GetType("System.Int32");
+                        break;
+                }
+                dt.Columns.Add(dc);
+            }
+            return dt;
+        }
+
+        /// <summary>
+        /// 导入模板使用
+        /// </summary>
+        /// <returns></returns>
+        public DataTable ImportBatchCustomerExcelDt()
+        {
+            var dt = new DataTable();
+            for (var i = 0; i < 2; i++)
+            {
+                var dc = new DataColumn();
+                switch (i)
+                {
+                    case 0: //客户编码
+                        dc.ColumnName = "客户编码";
+                        dc.DataType = Type.GetType("System.String");
+                        break;
+                    case 1: //客户名称
+                        dc.ColumnName = "客户名称";
+                        dc.DataType = Type.GetType("System.String");
+                        break;
+                }
+                dt.Columns.Add(dc);
+            }
+            return dt;
+        }
+
+        /// <summary>
+        /// 收集从SQL里获取的不重复的‘发货日期’--查询获取指定记录集使用
+        /// </summary>
+        /// <returns></returns>
+        public DataTable GetRecordSalesOutDateDt()
+        {
+            var dt = new DataTable();
+            for (var i = 0; i < 1; i++)
+            {
+                var dc = new DataColumn();
+                switch (i)
+                {
+                    case 0: //发货日期
+                        dc.ColumnName = "发货日期";
                         dc.DataType = Type.GetType("System.String");
                         break;
                 }
