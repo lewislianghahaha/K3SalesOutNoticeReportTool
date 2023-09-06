@@ -175,7 +175,7 @@ namespace K3SalesOutNoticeReportTool
                     }
                     else
                     {
-                        throw new Exception($"执行异常,原因:'{taskLogic.ResultMark}',\n请将此截图截图发给IT运营部进行处理");
+                        throw new Exception($"执行异常,原因:'{taskLogic.ResultMark}',\n请将此截图发给IT运营部进行处理");
                     }
 
                     //todo:运算完成后,无论成功与否,将原来设置的文本框(按钮) 及 Gridview初始化
