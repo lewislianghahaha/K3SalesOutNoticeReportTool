@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using K3SalesOutNoticeReportTool.DB;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
@@ -65,7 +62,7 @@ namespace K3SalesOutNoticeReportTool.Task
                         var cellValue = GetCellValue(cell);
 
                         //todo:判断cellValue在dt内存在,不进行插入 （作用:排除相同的记录）
-                        if (dt.Select("客户编码='"+cellValue+"'").Length>0 || dt.Select("客户名称='"+cellValue+"'").Length>0)
+                        if (dt.Select("客户编码='"+cellValue+"'").Length>0 /*|| dt.Select("客户名称='"+cellValue+"'").Length>0*/)
                         {
                             continue;
                         }
