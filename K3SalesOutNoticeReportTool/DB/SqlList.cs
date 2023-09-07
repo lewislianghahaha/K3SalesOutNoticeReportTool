@@ -65,10 +65,10 @@ namespace K3SalesOutNoticeReportTool.DB
 			                INNER JOIN dbo.T_SEC_USER Y0 ON A.FCREATORID=Y0.FUSERID
 
 			                WHERE A.FDOCUMENTSTATUS='C'
-			                AND CONVERT(VARCHAR(10),A.FDATE,23)>='{sdt}'
-			                AND CONVERT(VARCHAR(10),A.FDATE,23)<='{edt}' 
+			                AND CONVERT(VARCHAR(10),A.F_YTC_DATE,23)>='{sdt}' --FDATE
+			                AND CONVERT(VARCHAR(10),A.F_YTC_DATE,23)<='{edt}' 
 			                AND B.FALLAMOUNTFOR>=0.01    --价税合计
-			                AND A.F_YTC_DATE IS NOT NULL  --'复核日期'必填
+			                --AND A.F_YTC_DATE IS NOT NULL  --'复核日期'必填
 			                AND X0.FNUMBER IN({customerlist})   --一级客户编码为条件
 
 			                UNION
@@ -110,10 +110,10 @@ namespace K3SalesOutNoticeReportTool.DB
 			                INNER JOIN dbo.T_SEC_USER Y0 ON A.FCREATORID=Y0.FUSERID
 
 			                WHERE A.FDOCUMENTSTATUS='C'
-			                AND CONVERT(VARCHAR(10),A.FDATE,23)>='{sdt}'
-			                AND CONVERT(VARCHAR(10),A.FDATE,23)<='{edt}' 
+			                AND CONVERT(VARCHAR(10),A.F_YTC_DATE,23)>='{sdt}'
+			                AND CONVERT(VARCHAR(10),A.F_YTC_DATE,23)<='{edt}' 
 			                AND B.FALLAMOUNTFOR>=0.01    --价税合计
-			                AND A.F_YTC_DATE IS NOT NULL  --'复核日期'必填
+			                --AND A.F_YTC_DATE IS NOT NULL  --'复核日期'必填
 			                AND A.F_YTC_ASSISTANT='57946bda364e3f' --地区=‘中国区(原厂项目)’ 57946bda364e3f
 			                AND J0.FNUMBER IN({customerlist})   --二级客户编码为条件
 
@@ -156,10 +156,10 @@ namespace K3SalesOutNoticeReportTool.DB
 			                INNER JOIN dbo.T_SEC_USER Y0 ON A.FCREATORID=Y0.FUSERID
 
 			                WHERE A.FDOCUMENTSTATUS='C'
-			                AND CONVERT(VARCHAR(10),A.FDATE,23)>='{sdt}'
-			                AND CONVERT(VARCHAR(10),A.FDATE,23)<='{edt}' 
+			                AND CONVERT(VARCHAR(10),A.F_YTC_DATE,23)>='{sdt}'
+			                AND CONVERT(VARCHAR(10),A.F_YTC_DATE,23)<='{edt}' 
 			                AND B.FALLAMOUNT>=0.01    --价税合计本位币
-			                AND A.F_YTC_DATE IS NOT NULL  --'复核日期'必填
+			                --AND A.F_YTC_DATE IS NOT NULL  --'复核日期'必填
 			                AND A.F_YTC_ASSISTANT='57946bda364e3f' --地区=‘中国区(原厂项目)’ 57946bda364e3f
 			                AND A.F_YTC_BASE = 0  --二级客户为空(即为0)
 			                AND K0.FNUMBER IN({customerlist})
